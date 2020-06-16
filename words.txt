@@ -48,7 +48,6 @@ Market
 Problem
 Court
 Lot
-A
 War
 Police
 Interest
@@ -137,7 +136,7 @@ Role
 Reason
 Price
 Town
-class
+Class
 Nature
 Subject
 Department
@@ -164,7 +163,6 @@ Voice
 Lord
 Stage
 King
-Us
 Situation
 Light
 Tax
@@ -207,7 +205,7 @@ Hair
 Bill
 Heart
 Force
-attention
+Attention
 Movement
 Success
 Letter
@@ -237,7 +235,6 @@ Plan
 Behaviour
 Treatment
 Energy
-St
 Peter
 Income
 Cup
@@ -348,7 +345,6 @@ Task
 instance
 Sale
 Whole
-
 Officer
 Method
 Division
@@ -415,11 +411,10 @@ Reference
 Protection
 Truth
 District
-turn
+Turn
 Smith
 Review
 Minute
-
 Duty
 Survey
 Presence
@@ -523,7 +518,6 @@ Japan
 Claim
 Kingdom
 Video
-Tv
 Existence
 Telephone
 Move
@@ -582,7 +576,6 @@ Agency
 Seat
 Manner
 Favour
-Fig.
 Pair
 Crisis
 Smile
@@ -625,7 +618,6 @@ Expenditure
 Second
 Discipline
 Cell
-pp.
 Reaction
 Castle
 Congress
@@ -763,7 +755,7 @@ Sport
 Surprise
 Pension
 Factory
-tape
+Tape
 Flow
 Iron
 Trip
@@ -771,8 +763,6 @@ Lane
 Pool
 Independence
 Hole
-
-Un
 Flat
 Content
 Pay
@@ -833,7 +823,7 @@ Sum
 Decline
 Revenue
 Fall
-diet
+Diet
 Bedroom
 Soil
 Reader
@@ -842,10 +832,8 @@ Fruit
 Behalf
 Deputy
 Roof
-
 Nose
 Steel
-Co
 Artist
 Graham
 Plate
@@ -997,7 +985,6 @@ Thatcher
 Fun
 Arrival
 Snow
-No.
 Command
 Abuse
 Limit
