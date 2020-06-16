@@ -18,13 +18,16 @@ letterX = None
 letterY = None
 letterRect = None
 currentAcc = None
+results = False
 
 letter = "A"
 currentString = ""
-counter = 1
 word = ""
+counter = 1
 start_ticks = 0
 accuracy = 100
+maxTime = 20
+minAcc = 75
 #endregion variable_setup
 
 screen = pygame.display.set_mode((1920,1080), pygame.FULLSCREEN)
@@ -55,7 +58,47 @@ startRect.y = startY-(startRect.height/2)
 #endregion menu_text
 
 f = open("words.txt", "r")
-words=f.readlines()
+words = f.readlines()
+
+def DisplayResults():
+    screen.fill((0,0,0))
+
+    if accuracy > minAcc and (pygame.time.get_ticks()-start_ticks)/1000<maxTime:
+        resultText = Fboldbig.render("YOU WIN!", True, (33,204,78))
+    else:
+        resultText = Fboldbig.render("YOU LOSE :(", True, (224,22,22))
+    resultX = 960
+    resultY = 300
+    resultRect = resultText.get_rect()
+    resultRect.x = resultX-(resultRect.width/2)
+    resultRect.y = resultY-(resultRect.height/2)
+    screen.blit(resultText, (resultX-(resultRect.width/2),resultY-(resultRect.height/2)))
+
+    resultAccText = Fregmedium.render("Accuracy  |  Required: " + str(minAcc) + "%    Actual: " + str(round(accuracy,2)) + "%", True, (255,255,255))
+    resultAccX = 960
+    resultAccY = 550
+    resultAccRect = resultAccText.get_rect()
+    resultAccRect.x = resultAccX-(resultAccRect.width/2)
+    resultAccRect.y = resultAccY-(resultAccRect.height/2)
+    screen.blit(resultAccText, (resultAccX-(resultAccRect.width/2),resultAccY-(resultAccRect.height/2)))
+
+    resultTimeText = Fregmedium.render("Time  |  Required: " + str(maxTime) + "s    Actual: " + str(round((pygame.time.get_ticks()-start_ticks)/1000,3)) + "s", True, (255,255,255))
+    resultTimeX = 960
+    resultTimeY = 700
+    resultTimeRect = resultTimeText.get_rect()
+    resultTimeRect.x = resultTimeX-(resultTimeRect.width/2)
+    resultTimeRect.y = resultTimeY-(resultTimeRect.height/2)
+    screen.blit(resultTimeText, (resultTimeX-(resultTimeRect.width/2),resultTimeY-(resultTimeRect.height/2)))
+
+    continueText = Fregsmall.render("Click anywhere to continue", True, (255,255,255))
+    continueX = 960
+    continueY = 900
+    continueRect = continueText.get_rect()
+    continueRect.x = continueX-(continueRect.width/2)
+    continueRect.y = continueY-(continueRect.height/2)
+    screen.blit(continueText, (continueX-(continueRect.width/2),continueY-(continueRect.height/2)))
+
+    pygame.display.update()
 
 while running:
     for event in pygame.event.get():
@@ -70,7 +113,10 @@ while running:
                 if startRect.collidepoint(mousePos) and menu == True:
                     typingSetup = True
                     menu = False
-            elif event.button == 2:
+                if results == True:
+                    results = False
+                    menuSetup = True
+            elif event.button == 2 and typing == True:
                 currentString = currentString[:counter-1] + letter + currentString[counter:]
                 counter+=1
 
@@ -96,9 +142,12 @@ while running:
                 screen.blit(currentAcc, (20,70))
                 currentAcc = Fregsmall.render("Accuracy: " + str(round(accuracy,2)) + "%", True, (255,255,255))
                 screen.blit(currentAcc, (20,70))
+                pygame.display.update()
 
                 if counter == len(word):
-                    exit()
+                    typing = False
+                    results = True
+                    DisplayResults()
 
             elif event.button == 4 and typing == True:
                 if timer == True:
@@ -156,7 +205,7 @@ while running:
             goalRect.y = goalY-(goalRect.height/2)
             screen.blit(goalText, (goalX-(goalRect.width/2),goalY-(goalRect.height/2)))
 
-            timeText=Fregmedium.render("<30 Seconds", True, (255,255,255))
+            timeText=Fregmedium.render("<" + str(maxTime) + " Seconds", True, (255,255,255))
             timeX = 960
             timeY = 200
             timeRect = timeText.get_rect()
@@ -164,7 +213,7 @@ while running:
             timeRect.y = timeY-(timeRect.height/2)
             screen.blit(timeText, (timeX-(timeRect.width/2),timeY-(timeRect.height/2)))
 
-            accText = Fregmedium.render("75% Accuracy", True, (255,255,255))
+            accText = Fregmedium.render(str(minAcc) + "% Accuracy", True, (255,255,255))
             accX = 960
             accY = 275
             accRect = accText.get_rect()
@@ -208,6 +257,9 @@ while running:
 
         menuSetup = False
         menu = True
+        counter = 1
+        start_ticks = 0
+        accuracy = 100
 
         pygame.display.update()
     
