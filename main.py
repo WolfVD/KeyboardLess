@@ -1,20 +1,42 @@
 import pygame, sys, random
 pygame.init()
 
+#region variable_setup
 running = True
 menuSetup = True
 menu = True
 typingSetup = False
 typing = False
+timer = False
+
+currentText = None
+currentX = None
+currentY = None
+currentRect = None
+letterText = None
+letterX = None
+letterY = None
+letterRect = None
+currentAcc = None
+
+letter = "A"
+currentString = ""
+counter = 1
+word = ""
+start_ticks = 0
+accuracy = 100
+#endregion variable_setup
 
 screen = pygame.display.set_mode((1920,1080), pygame.FULLSCREEN)
 pygame.display.set_caption('KeyboardLess') 
 
+#region font_setup
 Fboldsmall = pygame.font.Font("Raleway-Bold.ttf", 100)
 Fboldbig = pygame.font.Font("Raleway-Bold.ttf", 180)
 Fregsmall = pygame.font.Font("Raleway-Regular.ttf", 40)
 Fregmedium = pygame.font.Font("Raleway-Regular.ttf", 60)
 Fregbig = pygame.font.Font("Raleway-Regular.ttf", 80)
+#endregion font_setup
 
 #region menu_text
 quitText = Fboldsmall.render('QUIT', True, (255, 255, 255))
@@ -35,18 +57,12 @@ startRect.y = startY-(startRect.height/2)
 f = open("words.txt", "r")
 words=f.readlines()
 
-letter = "A"
-currentString = ""
-counter = 1
-word = ""
-
 while running:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_F4 and bool(event.mod & pygame.KMOD_ALT):
                 running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print(event)
             if event.button == 1:
                 mousePos = pygame.mouse.get_pos()
                 if quitRect.collidepoint(mousePos) and menu == True:
@@ -68,10 +84,26 @@ while running:
                 currentRect.y = currentY-(currentRect.height/2)
                 screen.blit(currentText, (currentX-(currentRect.width/2),currentY-(currentRect.height/2)))
 
+                intended = word[counter-2].lower()
+                actual = letter.lower()
+                tempAcc = 100-(abs(ord(intended)-ord(actual))*25)
+                if tempAcc < 0:
+                    tempAcc = 0
+
+                accuracy = accuracy + ((tempAcc-accuracy)/(counter-1))
+
+                currentAcc.fill((0,0,0))
+                screen.blit(currentAcc, (20,70))
+                currentAcc = Fregsmall.render("Accuracy: " + str(round(accuracy,2)) + "%", True, (255,255,255))
+                screen.blit(currentAcc, (20,70))
+
                 if counter == len(word):
                     exit()
 
             elif event.button == 4 and typing == True:
+                if timer == True:
+                    start_ticks=pygame.time.get_ticks()
+                    timer = False
                 num = (ord(letter)-63)
                 if num == 27:
                     num = 1
@@ -88,6 +120,9 @@ while running:
                 screen.blit(letterText, (letterX-(letterRect.width/2),letterY-(letterRect.height/2)))
 
             elif event.button == 5 and typing == True:
+                if timer == True:
+                    start_ticks=pygame.time.get_ticks()
+                    timer = False
                 num = (ord(letter)-64)
                 if num == 1:
                     num = 27
@@ -164,6 +199,7 @@ while running:
 
         typingSetup = False
         typing = True
+        timer = True
 
     if menuSetup == True:
         screen.fill((0,0,0))
@@ -176,6 +212,13 @@ while running:
         pygame.display.update()
     
     if typing == True:
+        if timer == False:
+            seconds = (pygame.time.get_ticks()-start_ticks)/1000
+            currentTime.fill((0,0,0))
+            screen.blit(currentTime, (20,20))
+            currentTime = Fregsmall.render("Time: " + str(seconds), True, (255,255,255))
+            screen.blit(currentTime, (20,20))
+
         pygame.display.update()
 
 
