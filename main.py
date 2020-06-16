@@ -35,17 +35,74 @@ startRect.y = startY-(startRect.height/2)
 f = open("words.txt", "r")
 words=f.readlines()
 
+letter = "A"
+currentString = ""
+counter = 1
+word = ""
+
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mousePos = pygame.mouse.get_pos()
-            if quitRect.collidepoint(mousePos) and menu == True:
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_F4 and bool(event.mod & pygame.KMOD_ALT):
                 running = False
-            if startRect.collidepoint(mousePos) and menu == True:
-                typingSetup = True
-                menu = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            print(event)
+            if event.button == 1:
+                mousePos = pygame.mouse.get_pos()
+                if quitRect.collidepoint(mousePos) and menu == True:
+                    running = False
+                if startRect.collidepoint(mousePos) and menu == True:
+                    typingSetup = True
+                    menu = False
+            elif event.button == 2:
+                currentString = currentString[:counter-1] + letter + currentString[counter:]
+                counter+=1
+
+                currentText.fill((0,0,0))
+                screen.blit(currentText, (currentX-(currentRect.width/2),currentY-(currentRect.height/2)))
+                currentText = Fboldsmall.render(currentString, True, (255,255,255))
+                currentX = 960
+                currentY = 850
+                currentRect = currentText.get_rect()
+                currentRect.x = currentX-(currentRect.width/2)
+                currentRect.y = currentY-(currentRect.height/2)
+                screen.blit(currentText, (currentX-(currentRect.width/2),currentY-(currentRect.height/2)))
+
+                if counter == len(word):
+                    exit()
+
+            elif event.button == 4 and typing == True:
+                num = (ord(letter)-63)
+                if num == 27:
+                    num = 1
+                letter = chr(num+64)
+
+                letterText.fill((0,0,0))
+                screen.blit(letterText, (letterX-(letterRect.width/2),letterY-(letterRect.height/2)))
+                letterText = Fboldbig.render(letter, True, (255, 255, 255))
+                letterX = 960
+                letterY = 540
+                letterRect = letterText.get_rect()
+                letterRect.x = letterX-(letterRect.width/2)
+                letterRect.y = letterY-(letterRect.height/2)
+                screen.blit(letterText, (letterX-(letterRect.width/2),letterY-(letterRect.height/2)))
+
+            elif event.button == 5 and typing == True:
+                num = (ord(letter)-64)
+                if num == 1:
+                    num = 27
+                letter = chr(num+63)
+
+                letterText.fill((0,0,0))
+                screen.blit(letterText, (letterX-(letterRect.width/2),letterY-(letterRect.height/2)))
+                letterText = Fboldbig.render(letter, True, (255, 255, 255))
+                letterX = 960
+                letterY = 540
+                letterRect = letterText.get_rect()
+                letterRect.x = letterX-(letterRect.width/2)
+                letterRect.y = letterY-(letterRect.height/2)
+                screen.blit(letterText, (letterX-(letterRect.width/2),letterY-(letterRect.height/2)))
+
 
     if typingSetup == True:
         for i in range(5):
@@ -80,7 +137,7 @@ while running:
             accRect.y = accY-(accRect.height/2)
             screen.blit(accText, (accX-(accRect.width/2),accY-(accRect.height/2)))
 
-            letterText = Fboldbig.render('A', True, (255, 255, 255))
+            letterText = Fboldbig.render(letter, True, (255, 255, 255))
             letterX = 960
             letterY = 540
             letterRect = letterText.get_rect()
@@ -116,6 +173,9 @@ while running:
         menuSetup = False
         menu = True
 
+        pygame.display.update()
+    
+    if typing == True:
         pygame.display.update()
 
 
