@@ -1,5 +1,5 @@
 # KeyboardLess
-A "game" (currently more a proof of concept) where you try and type words using your scrollwheel.
+A "game" (currently more a proof of concept) where you try and type words using your scrollwheel. Not playable on trackpad.
 
 
 ## Status
